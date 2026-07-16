@@ -1,27 +1,19 @@
-# ============================================
-# ORVIX Ground Control Software - .gitignore
-# ============================================
-
-# Documentation (local development reference only)
+# Documentation (local only)
 docs/
 Docs/
 
-# Node modules
+# Dependencies
 node_modules/
+package-lock.json
 
-# OS generated files
+# OS files
 .DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
 Thumbs.db
-desktop.ini
+Desktop.ini
 
-# Log files
+# Logs
 *.log
-npm-debug.log*
+npm-debug.log
 
 # Editor files
 .vscode/
@@ -30,6 +22,10 @@ npm-debug.log*
 *.swo
 *~
 
-# Temporary files
-*.tmp
-*.temp
+# Build artifacts
+dist/
+build/
+
+# Environment
+.env
+.env.local
