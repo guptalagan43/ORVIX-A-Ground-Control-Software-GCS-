@@ -85,114 +85,14 @@ const TopBar = (function () {
    * Export CSV — download telemetry history as a CSV file.
    */
   function handleExportCSV() {
-    const history = TelemetryLogger.getTelemetryHistory();
-    if (history.length === 0) {
-      alert("No telemetry data to export.");
-      return;
-    }
-
-    const headers = CONFIG.EXPORT.CSV_HEADERS;
-    const sep = CONFIG.EXPORT.CSV_SEPARATOR;
-
-    // Build CSV rows
-    const rows = [headers.join(sep)];
-    for (let i = 0; i < history.length; i++) {
-      const p = history[i];
-      const errorCode = (OrvixState.get("errorCodes") || [0, 0, 0, 0]).join("");
-      rows.push(
-        [
-          p.timestamp,
-          p.packetId,
-          p.batteryVoltage,
-          p.altitude,
-          p.pressure,
-          p.temperature,
-          p.gpsLat,
-          p.gpsLon,
-          p.roll,
-          p.pitch,
-          p.yaw,
-          p.descentRate,
-          p.separationStatus,
-          p.parachuteStatus,
-          errorCode,
-        ].join(sep)
-      );
-    }
-
-    const csv = rows.join("\n");
-    const filename =
-      CONFIG.EXPORT.FILENAME_PREFIX_CSV + _formatDateForFilename() + ".csv";
-
-    _downloadBlob(csv, filename, "text/csv;charset=utf-8;");
-    OrvixState.logCommand("EXPORT_CSV", CONFIG.COMMAND_STATUS.ACKNOWLEDGED, filename);
-    console.log("[TopBar] Exported CSV:", filename, "(" + history.length + " rows)");
+    ExportManager.exportTelemetryCSV();
   }
 
   /**
    * Export Graph — capture graph canvases as a combined PNG.
-   * Placeholder implementation — full logic added in Phase 3
-   * when Chart.js instances are available.
    */
   function handleExportGraph() {
-    const canvasIds = [
-      "chart-altitude",
-      "chart-pressure",
-      "chart-temperature",
-      "chart-descent-rate",
-      "chart-battery",
-    ];
-
-    // Collect all chart canvases
-    const canvases = [];
-    for (let i = 0; i < canvasIds.length; i++) {
-      const canvas = document.getElementById(canvasIds[i]);
-      if (canvas && canvas.width > 0 && canvas.height > 0) {
-        canvases.push(canvas);
-      }
-    }
-
-    if (canvases.length === 0) {
-      alert("No graph data to export. Start telemetry first.");
-      return;
-    }
-
-    // Stack all canvases vertically into a single composite image
-    const padding = 16;
-    const totalWidth = Math.max.apply(
-      null,
-      canvases.map(function (c) { return c.width; })
-    );
-    const totalHeight = canvases.reduce(function (sum, c) {
-      return sum + c.height + padding;
-    }, 0);
-
-    const composite = document.createElement("canvas");
-    composite.width = totalWidth;
-    composite.height = totalHeight;
-    const ctx = composite.getContext("2d");
-    ctx.fillStyle = "#000000";
-    ctx.fillRect(0, 0, totalWidth, totalHeight);
-
-    let y = 0;
-    for (let i = 0; i < canvases.length; i++) {
-      ctx.drawImage(canvases[i], 0, y);
-      y += canvases[i].height + padding;
-    }
-
-    composite.toBlob(function (blob) {
-      if (!blob) return;
-      const filename =
-        CONFIG.EXPORT.FILENAME_PREFIX_GRAPH + _formatDateForFilename() + ".png";
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = filename;
-      a.click();
-      URL.revokeObjectURL(url);
-      OrvixState.logCommand("EXPORT_GRAPH", CONFIG.COMMAND_STATUS.ACKNOWLEDGED, filename);
-      console.log("[TopBar] Exported graphs:", filename);
-    }, "image/png");
+    ExportManager.exportGraphsPNG();
   }
 
   /**
@@ -289,45 +189,6 @@ const TopBar = (function () {
       // Add the matching class
       _els.statusDot.classList.add("status-indicator--" + status);
     }
-  }
-
-  /**
-   * Format current date/time for use in filenames.
-   * Format: YYYYMMDD_HHMMSS
-   *
-   * @returns {string}
-   */
-  function _formatDateForFilename() {
-    const d = new Date();
-    const pad = function (n) { return n < 10 ? "0" + n : "" + n; };
-    return (
-      d.getFullYear() +
-      pad(d.getMonth() + 1) +
-      pad(d.getDate()) +
-      "_" +
-      pad(d.getHours()) +
-      pad(d.getMinutes()) +
-      pad(d.getSeconds())
-    );
-  }
-
-  /**
-   * Trigger a file download from a string blob.
-   *
-   * @param {string} content  - File content
-   * @param {string} filename - Download filename
-   * @param {string} mimeType - MIME type string
-   */
-  function _downloadBlob(content, filename, mimeType) {
-    const blob = new Blob([content], { type: mimeType });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
   }
 
   // ── Public interface ──────────────────────────────────────────

@@ -49,6 +49,7 @@ const OrvixApp = (function () {
     GpsMapManager.initializeMap();
     OrientationManager.initializeOrientation();
     MissionControls.initializeMissionControls();
+    VideoStreamManager.initializeVideo();
 
     // Subscribe to state changes for reactive UI updates
     OrvixState.subscribe(_onStateChange);
@@ -79,6 +80,7 @@ const OrvixApp = (function () {
       GpsMapManager.clearMap();
       OrientationManager.clearOrientation();
       MissionControls.clearCommandLog();
+      VideoStreamManager.stopStream();
     }
 
     // Telemetry packet updates
