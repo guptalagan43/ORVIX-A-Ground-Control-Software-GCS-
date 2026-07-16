@@ -44,6 +44,8 @@ const OrvixApp = (function () {
 
     // Initialise sub-modules
     TopBar.initialize();
+    ChartsManager.initializeCharts();
+    ErrorCodeMonitor.initializeErrorMonitoring();
 
     // Subscribe to state changes for reactive UI updates
     OrvixState.subscribe(_onStateChange);
@@ -68,9 +70,19 @@ const OrvixApp = (function () {
    * @param {Object} next - New state
    */
   function _onStateChange(prev, next) {
-    // Telemetry table update
+    // Telemetry reset check
+    if (prev.packetCount > 0 && next.packetCount === 0) {
+      ChartsManager.clearAllCharts();
+    }
+
+    // Telemetry packet updates
     if (prev.currentPacket !== next.currentPacket && next.currentPacket) {
       _updateTelemetryDisplay(next.currentPacket);
+      ChartsManager.updateCharts(next.currentPacket);
+      
+      // Calculate and update error codes in state
+      const nextCodes = ErrorCodeMonitor.calculateErrorCodes(next.currentPacket);
+      OrvixState.updateErrorCodes(nextCodes);
     }
 
     // Connection status change
@@ -82,7 +94,8 @@ const OrvixApp = (function () {
     if (
       prev.errorCodes.join("") !== next.errorCodes.join("")
     ) {
-      _updateErrorCodeDisplay(next.errorCodes);
+      ErrorCodeMonitor.updateErrorDisplay(next.errorCodes);
+      ErrorCodeMonitor.checkErrorTransition(prev.errorCodes, next.errorCodes);
     }
 
     // Packet count badge
@@ -143,46 +156,6 @@ const OrvixApp = (function () {
    */
   function _updatePacketBadge(count) {
     _setTextById("packet-count-badge", count + " pkts");
-  }
-
-  // ── Error Code Display ────────────────────────────────────────
-
-  /**
-   * Update the 4-digit error code display.
-   * Adds/removes the "fault" class for pulse animation.
-   *
-   * @param {number[]} codes - Array of 4 digits (0 or 1)
-   */
-  function _updateErrorCodeDisplay(codes) {
-    for (let i = 0; i < 4; i++) {
-      const el = document.getElementById("error-digit-" + (i + 1));
-      if (!el) continue;
-
-      el.textContent = codes[i];
-
-      if (codes[i] === 1) {
-        el.classList.add("fault");
-      } else {
-        el.classList.remove("fault");
-      }
-    }
-
-    // Update status badge
-    const hasError = codes.some(function (d) { return d === 1; });
-    const badge = document.getElementById("error-status-badge");
-    if (badge) {
-      if (hasError) {
-        badge.textContent = "FAULT";
-        badge.className = "panel__badge panel__badge--status";
-        badge.style.color = "var(--color-danger)";
-        badge.style.borderColor = "var(--color-danger)";
-      } else {
-        badge.textContent = "NOMINAL";
-        badge.className = "panel__badge panel__badge--status";
-        badge.style.color = "var(--color-success)";
-        badge.style.borderColor = "var(--color-success)";
-      }
-    }
   }
 
   // ── GPS Display ───────────────────────────────────────────────
