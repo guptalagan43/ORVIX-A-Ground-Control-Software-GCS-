@@ -1,0 +1,65 @@
+/* ============================================================
+   ORVIX Ground Control Software — Design System
+   CanSat Mission Monitoring Dashboard
+   
+   Minimal placeholder — Full design system created in Step 3
+   ============================================================ */
+
+/* ===== CSS Custom Properties ===== */
+:root {
+  /* Base Colors */
+  --color-bg: #000000;
+  --color-bg-panel: #0A0A0A;
+  --color-text: #FFFFFF;
+  --color-text-muted: #B0B0B0;
+  --color-border: #333333;
+
+  /* Accent Colors */
+  --color-success: #00E676;
+  --color-danger: #FF3B30;
+  --color-warning: #FFD600;
+  --color-info: #2979FF;
+
+  /* Fonts */
+  --font-heading: 'Inter', Arial, sans-serif;
+  --font-body: 'Inter', Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+
+  /* Spacing (8px grid) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+}
+
+/* ===== Reset ===== */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ===== Global Defaults ===== */
+body {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.5;
+  background: var(--color-bg);
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+/* ===== Temporary layout to render all sections ===== */
+/* Full design system will replace this in Step 3 */
+
+.data-value {
+  font-family: var(--font-mono);
+}
