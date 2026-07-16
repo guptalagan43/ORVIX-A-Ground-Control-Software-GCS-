@@ -47,17 +47,36 @@ const ExportManager = (function () {
   }
 
   /**
-   * Capture all 5 real-time Chart.js canvases and stack them vertically
-   * into a single composite PNG image.
+   * Capture Chart.js canvases (all stacked or individual) and export
+   * them as a PNG image file.
+   *
+   * @param {string} [chartType="all"] - "all", "altitude", "pressure", "temperature", "descent", "battery"
    */
-  function exportGraphsPNG() {
-    const canvasIds = [
-      "chart-altitude",
-      "chart-pressure",
-      "chart-temperature",
-      "chart-descent-rate",
-      "chart-battery",
-    ];
+  function exportGraphsPNG(chartType) {
+    const type = chartType || "all";
+
+    const canvasMap = {
+      altitude: "chart-altitude",
+      pressure: "chart-pressure",
+      temperature: "chart-temperature",
+      descent: "chart-descent-rate",
+      battery: "chart-battery",
+    };
+
+    let canvasIds = [];
+    if (type === "all") {
+      canvasIds = [
+        "chart-altitude",
+        "chart-pressure",
+        "chart-temperature",
+        "chart-descent-rate",
+        "chart-battery",
+      ];
+    } else if (canvasMap[type]) {
+      canvasIds = [canvasMap[type]];
+    } else {
+      canvasIds = [type];
+    }
 
     // Collect valid canvas elements
     const canvases = [];
@@ -74,42 +93,57 @@ const ExportManager = (function () {
     }
 
     try {
-      const padding = 16;
-      // Use maximum width to avoid truncation
-      const totalWidth = Math.max.apply(
-        null,
-        canvases.map(function (c) { return c.width; })
-      );
-      // Total height is the sum of heights plus standard margins
-      const totalHeight = canvases.reduce(function (sum, c) {
-        return sum + c.height + padding;
-      }, 0);
+      let finalCanvas;
 
-      // Create a temporary off-screen canvas to assemble the composite
-      const compositeCanvas = document.createElement("canvas");
-      compositeCanvas.width = totalWidth;
-      compositeCanvas.height = totalHeight;
-      const ctx = compositeCanvas.getContext("2d");
+      if (canvases.length === 1) {
+        // Draw single chart onto a dark background
+        const sourceCanvas = canvases[0];
+        finalCanvas = document.createElement("canvas");
+        finalCanvas.width = sourceCanvas.width;
+        finalCanvas.height = sourceCanvas.height;
+        const ctx = finalCanvas.getContext("2d");
+        ctx.fillStyle = "#0A0A0A";
+        ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
+        ctx.drawImage(sourceCanvas, 0, 0);
+      } else {
+        const padding = 16;
+        // Use maximum width to avoid truncation
+        const totalWidth = Math.max.apply(
+          null,
+          canvases.map(function (c) { return c.width; })
+        );
+        // Total height is the sum of heights plus standard margins
+        const totalHeight = canvases.reduce(function (sum, c) {
+          return sum + c.height + padding;
+        }, 0) - padding;
 
-      // Draw dark background to match design theme
-      ctx.fillStyle = "#0A0A0A";
-      ctx.fillRect(0, 0, totalWidth, totalHeight);
+        // Create a temporary off-screen canvas to assemble the composite
+        finalCanvas = document.createElement("canvas");
+        finalCanvas.width = totalWidth;
+        finalCanvas.height = totalHeight;
+        const ctx = finalCanvas.getContext("2d");
 
-      // Draw each chart onto the composite canvas
-      let yOffset = 0;
-      for (let i = 0; i < canvases.length; i++) {
-        const c = canvases[i];
-        ctx.drawImage(c, 0, yOffset, c.width, c.height);
-        yOffset += c.height + padding;
+        // Draw dark background to match design theme
+        ctx.fillStyle = "#0A0A0A";
+        ctx.fillRect(0, 0, totalWidth, totalHeight);
+
+        // Draw each chart onto the composite canvas
+        let yOffset = 0;
+        for (let i = 0; i < canvases.length; i++) {
+          const c = canvases[i];
+          ctx.drawImage(c, 0, yOffset, c.width, c.height);
+          yOffset += c.height + padding;
+        }
       }
 
       // Convert to blob and download
-      compositeCanvas.toBlob(function (blob) {
+      finalCanvas.toBlob(function (blob) {
         if (!blob) {
-          console.error("[Export] Failed to render composite graph image.");
+          console.error("[Export] Failed to render graph image.");
           return;
         }
-        const filename = _generateTimestampFilename(CONFIG.EXPORT.FILENAME_PREFIX_GRAPH, "png");
+        const filePrefix = type === "all" ? CONFIG.EXPORT.FILENAME_PREFIX_GRAPH : `mission_graph_${type}_`;
+        const filename = _generateTimestampFilename(filePrefix, "png");
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;

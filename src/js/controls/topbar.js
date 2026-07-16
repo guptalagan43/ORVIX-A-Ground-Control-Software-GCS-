@@ -89,10 +89,12 @@ const TopBar = (function () {
   }
 
   /**
-   * Export Graph — capture graph canvases as a combined PNG.
+   * Export Graph — capture graph canvases as a combined or individual PNG.
    */
   function handleExportGraph() {
-    ExportManager.exportGraphsPNG();
+    const select = document.getElementById("select-export-graph");
+    const chartType = select ? select.value : "all";
+    ExportManager.exportGraphsPNG(chartType);
   }
 
   /**

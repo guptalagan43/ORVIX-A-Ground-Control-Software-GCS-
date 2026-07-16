@@ -32,7 +32,6 @@
   <header class="topbar" role="banner">
     <div class="topbar__brand">
       <h1 class="topbar__title">ORVIX</h1>
-      <span class="topbar__subtitle">Ground Control Software</span>
     </div>
 
     <nav class="topbar__controls" role="toolbar" aria-label="Mission controls toolbar">
@@ -84,20 +83,36 @@
           Export CSV
         </button>
 
-        <button
-          type="button"
-          id="btn-export-graph"
-          class="btn"
-          aria-label="Export graphs as PNG image"
-          title="Capture all real-time graphs as a PNG image file"
-        >
-          <svg class="btn__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-            <circle cx="8.5" cy="8.5" r="1.5"></circle>
-            <polyline points="21 15 16 10 5 21"></polyline>
-          </svg>
-          Export Graph
-        </button>
+        <div style="display: flex; gap: var(--space-1); align-items: center;">
+          <select
+            id="select-export-graph"
+            class="select-btn"
+            aria-label="Select graph to export"
+            title="Select which graph to export as PNG"
+          >
+            <option value="all">ALL GRAPHS</option>
+            <option value="altitude">ALTITUDE</option>
+            <option value="pressure">PRESSURE</option>
+            <option value="temperature">TEMPERATURE</option>
+            <option value="descent">DESCENT RATE</option>
+            <option value="battery">BATTERY</option>
+          </select>
+
+          <button
+            type="button"
+            id="btn-export-graph"
+            class="btn"
+            aria-label="Export graphs as PNG image"
+            title="Capture selected graph(s) as a PNG image file"
+          >
+            <svg class="btn__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <circle cx="8.5" cy="8.5" r="1.5"></circle>
+              <polyline points="21 15 16 10 5 21"></polyline>
+            </svg>
+            Export Graph
+          </button>
+        </div>
       </div>
 
       <!-- System Controls -->

@@ -279,31 +279,28 @@ h3 {
 
 .topbar__brand {
   display: flex;
-  align-items: baseline;
-  gap: var(--space-2);
+  align-items: center;
   flex-shrink: 0;
 }
 
 .topbar__title {
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: 2px;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 3px;
   color: var(--color-text);
-}
-
-.topbar__subtitle {
-  font-size: 11px;
-  font-weight: 400;
-  color: var(--color-text-muted);
-  text-transform: uppercase;
-  letter-spacing: 1px;
 }
 
 .topbar__controls {
   display: flex;
   align-items: center;
-  gap: var(--space-4);
-  flex-wrap: wrap;
+  gap: var(--space-3);
+  flex-wrap: nowrap;
+}
+
+.topbar .btn {
+  padding: 6px 12px;
+  font-size: 11px;
+  letter-spacing: 0.5px;
 }
 
 .topbar__group {
@@ -481,6 +478,45 @@ h3 {
   font-size: 14px;
   justify-content: flex-start;
   gap: var(--space-3);
+}
+
+/* Styled dropdown select for graph export */
+.select-btn {
+  background: var(--color-bg-panel);
+  color: var(--color-text);
+  border: 2px solid var(--color-border);
+  border-radius: var(--panel-radius);
+  padding: 6px 12px;
+  font-family: var(--font-heading);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  outline: none;
+  transition: all var(--transition-fast);
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 12px;
+  padding-right: 24px;
+}
+
+.select-btn:hover {
+  border-color: var(--color-text);
+}
+
+.select-btn:focus {
+  border-color: var(--color-info);
+  box-shadow: 0 0 0 3px rgba(41, 121, 255, 0.3);
+}
+
+.select-btn option {
+  background: var(--color-bg-panel);
+  color: var(--color-text);
 }
 
 
