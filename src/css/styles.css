@@ -281,6 +281,7 @@ h3 {
   display: flex;
   align-items: center;
   flex-shrink: 0;
+  margin-left: var(--space-5);
 }
 
 .topbar__title {
