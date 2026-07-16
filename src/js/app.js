@@ -48,6 +48,7 @@ const OrvixApp = (function () {
     ErrorCodeMonitor.initializeErrorMonitoring();
     GpsMapManager.initializeMap();
     OrientationManager.initializeOrientation();
+    MissionControls.initializeMissionControls();
 
     // Subscribe to state changes for reactive UI updates
     OrvixState.subscribe(_onStateChange);
@@ -77,6 +78,7 @@ const OrvixApp = (function () {
       ChartsManager.clearAllCharts();
       GpsMapManager.clearMap();
       OrientationManager.clearOrientation();
+      MissionControls.clearCommandLog();
     }
 
     // Telemetry packet updates
@@ -85,6 +87,14 @@ const OrvixApp = (function () {
       ChartsManager.updateCharts(next.currentPacket);
       GpsMapManager.updateMap(next.currentPacket);
       OrientationManager.updateOrientation(next.currentPacket);
+
+      // Check for command acknowledgments in telemetry status fields
+      if (next.currentPacket.separationStatus === 1 && !prev.separationConfirmed) {
+        MissionControls.handleCommandResponse("MANUAL_SEPARATION", true);
+      }
+      if (next.currentPacket.parachuteStatus === 1 && !prev.parachuteDeployed) {
+        MissionControls.handleCommandResponse("EMERGENCY_PARACHUTE", true);
+      }
       
       // Calculate and update error codes in state
       const nextCodes = ErrorCodeMonitor.calculateErrorCodes(next.currentPacket);
