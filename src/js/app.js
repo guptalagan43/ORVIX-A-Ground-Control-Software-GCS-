@@ -284,6 +284,95 @@ const OrvixApp = (function () {
     _setTextById("footer-memory", approxMB + " MB");
   }
 
+  // ── Simulator Controls ────────────────────────────────────────
+
+  /**
+   * Toggle between active simulated stream and offline.
+   */
+  function toggleSimulator() {
+    const isSimulating = OrvixState.get("simulatorActive") || false;
+    if (isSimulating) {
+      stopSimulatorMode();
+    } else {
+      startSimulatorMode();
+    }
+  }
+
+  /**
+   * Activate flight simulation.
+   */
+  function startSimulatorMode() {
+    // Stop live serial stream if currently active
+    if (OrvixState.get("isConnected") && !OrvixState.get("simulatorActive")) {
+      TopBar.handleStopTelemetry();
+    }
+
+    TelemetrySimulator.startSimulation(CONFIG.SIMULATOR.PACKET_INTERVAL, handleIncomingPacket);
+
+    OrvixState.setState({
+      simulatorActive: true,
+      telemetryStreaming: true,
+      isConnected: true,
+      missionStartTime: OrvixState.get("missionStartTime") || Date.now(),
+    });
+
+    // Update status dot and text
+    const statusText = document.getElementById("connection-status-text");
+    if (statusText) statusText.textContent = "SIMULATING";
+    const statusDot = document.getElementById("connection-status-dot");
+    if (statusDot) {
+      statusDot.className = "status-indicator status-indicator--online";
+    }
+
+    // Indicate active state on simulator button
+    const btnSim = document.getElementById("btn-simulator");
+    if (btnSim) btnSim.classList.add("active");
+
+    TelemetryLogger.startRateCounter();
+    console.log("[App] Simulator mode activated.");
+  }
+
+  /**
+   * Stop flight simulation.
+   */
+  function stopSimulatorMode() {
+    TelemetrySimulator.stopSimulation();
+
+    OrvixState.setState({
+      simulatorActive: false,
+      telemetryStreaming: false,
+      isConnected: false,
+    });
+
+    const statusText = document.getElementById("connection-status-text");
+    if (statusText) statusText.textContent = "DISCONNECTED";
+    const statusDot = document.getElementById("connection-status-dot");
+    if (statusDot) {
+      statusDot.className = "status-indicator status-indicator--offline";
+    }
+
+    const btnSim = document.getElementById("btn-simulator");
+    if (btnSim) btnSim.classList.remove("active");
+
+    TelemetryLogger.stopRateCounter();
+    console.log("[App] Simulator mode deactivated.");
+  }
+
+  /**
+   * Receive and process packet from the telemetry simulator.
+   *
+   * @param {Object} packet
+   */
+  function handleIncomingPacket(packet) {
+    if (!packet) return;
+
+    // Log the packet to telemetry history
+    OrvixState.addTelemetryPacket(packet);
+
+    // Coordinate state update for GPS
+    OrvixState.addGpsPoint(packet.gpsLat, packet.gpsLon);
+  }
+
   // ── UI Update Loop ────────────────────────────────────────────
 
   /**
@@ -416,6 +505,10 @@ const OrvixApp = (function () {
 
   return {
     initializeApp: initializeApp,
+    toggleSimulator: toggleSimulator,
+    startSimulatorMode: startSimulatorMode,
+    stopSimulatorMode: stopSimulatorMode,
+    handleIncomingPacket: handleIncomingPacket,
   };
 })();
 

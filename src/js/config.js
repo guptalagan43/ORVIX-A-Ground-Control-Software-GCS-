@@ -179,4 +179,19 @@ const CONFIG = Object.freeze({
     FILENAME_PREFIX_CSV: "mission_data_",
     FILENAME_PREFIX_GRAPH: "mission_graphs_",
   },
+
+  // ===== Telemetry Simulator =====
+  SIMULATOR: {
+    ENABLED: false,
+    PACKET_INTERVAL: 100,     // ms between packets (10 Hz)
+    LAUNCH_LAT: 26.9124,      // Default launch latitude (Jaipur)
+    LAUNCH_LON: 75.7873,      // Default launch longitude
+    MAX_ALTITUDE: 3000,       // Apogee altitude in meters
+    ASCENT_RATE: 40,          // m/s during ascent
+    DESCENT_RATE_NORMAL: 9,   // m/s during descent
+    BATTERY_START: 4.2,       // Starting voltage
+    BATTERY_END: 3.7,         // Ending voltage
+    TEMPERATURE_BASE: 25,     // °C at sea level
+    PRESSURE_BASE: 1013.25,   // hPa at sea level
+  },
 });

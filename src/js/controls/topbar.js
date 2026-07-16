@@ -145,6 +145,7 @@ const TopBar = (function () {
       btnExportGraph: document.getElementById("btn-export-graph"),
       btnSyncTime: document.getElementById("btn-sync-time"),
       btnResetPackets: document.getElementById("btn-reset-packets"),
+      btnSimulator: document.getElementById("btn-simulator"),
       statusDot: document.getElementById("connection-status-dot"),
       statusText: document.getElementById("connection-status-text"),
     };
@@ -160,6 +161,13 @@ const TopBar = (function () {
     if (_els.btnExportGraph) _els.btnExportGraph.addEventListener("click", handleExportGraph);
     if (_els.btnSyncTime)   _els.btnSyncTime.addEventListener("click", handleSyncTime);
     if (_els.btnResetPackets) _els.btnResetPackets.addEventListener("click", handleResetPackets);
+    if (_els.btnSimulator) {
+      _els.btnSimulator.addEventListener("click", function () {
+        if (typeof OrvixApp !== "undefined" && typeof OrvixApp.toggleSimulator === "function") {
+          OrvixApp.toggleSimulator();
+        }
+      });
+    }
   }
 
   /**
