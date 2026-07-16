@@ -2,7 +2,7 @@
 
 A professional, single-page Ground Control Software dashboard for monitoring and controlling CanSat missions in real-time. Built with an aerospace-grade black-and-white interface with vibrant color accents for critical status indicators.
 
-![Status](https://img.shields.io/badge/Phase-1%20Foundation-blue)
+![Status](https://img.shields.io/badge/Phase-8%20Polish%20%26%20Documentation-success)
 ![Tech](https://img.shields.io/badge/Stack-HTML%20%7C%20CSS%20%7C%20JavaScript-black)
 
 ---
@@ -16,7 +16,7 @@ A professional, single-page Ground Control Software dashboard for monitoring and
 - **Mission Controls** — Manual Separation, Emergency Parachute, Redundant Activation with safety confirmations
 - **Orientation Display** — Roll, Pitch, Yaw visualization
 - **Live Video Stream** — Camera feed integration via MediaDevices API
-- **Data Export** — CSV telemetry export and graph image capture
+- **Data Export** — CSV telemetry export, graph image capture (stacked PNG composite), and JSON mission logs
 
 ---
 
@@ -115,14 +115,14 @@ orvix/
 
 | Phase | Name | Status |
 |-------|------|--------|
-| 1 | Foundation & Setup | 🔄 In Progress |
-| 2 | Core UI & Telemetry | ⚪ Pending |
-| 3 | Graphs & Monitoring | ⚪ Pending |
-| 4 | Map & Orientation | ⚪ Pending |
-| 5 | Mission Controls | ⚪ Pending |
-| 6 | Video & Export | ⚪ Pending |
-| 7 | Hardware Integration | ⚪ Pending |
-| 8 | Polish & Documentation | ⚪ Pending |
+| 1 | Foundation & Setup | ✅ Complete |
+| 2 | Core UI & Telemetry | ✅ Complete |
+| 3 | Graphs & Monitoring | ✅ Complete |
+| 4 | Map & Orientation | ✅ Complete |
+| 5 | Mission Controls | ✅ Complete |
+| 6 | Video & Export | ✅ Complete |
+| 7 | Hardware Integration | ✅ Complete |
+| 8 | Polish & Documentation | ✅ Complete |
 
 ---
 
