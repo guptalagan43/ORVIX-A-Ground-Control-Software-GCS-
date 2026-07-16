@@ -1,51 +1,84 @@
 /* ============================================================
    ORVIX Ground Control Software — Design System
    CanSat Mission Monitoring Dashboard
-   
-   Minimal placeholder — Full design system created in Step 3
+
+   Design Reference: design.md v1.0
+   Color Palette:    Black/White base + Green/Yellow/Red/Blue accents
+   Typography:       Inter (headings/body) + JetBrains Mono (data)
+   Grid System:      8px base unit, CSS Grid layout
    ============================================================ */
 
-/* ===== CSS Custom Properties ===== */
+
+/* =================================================================
+   1. CSS CUSTOM PROPERTIES (Design Tokens)
+   ================================================================= */
+
 :root {
-  /* Base Colors */
-  --color-bg: #000000;
-  --color-bg-panel: #0A0A0A;
-  --color-text: #FFFFFF;
-  --color-text-muted: #B0B0B0;
-  --color-border: #333333;
+  /* --- Base Colors --- */
+  --color-bg:          #000000;
+  --color-bg-panel:    #0A0A0A;
+  --color-bg-elevated: #111111;
+  --color-text:        #FFFFFF;
+  --color-text-muted:  #B0B0B0;
+  --color-border:      #333333;
+  --color-border-light:#222222;
 
-  /* Accent Colors */
-  --color-success: #00E676;
-  --color-danger: #FF3B30;
-  --color-warning: #FFD600;
-  --color-info: #2979FF;
+  /* --- Accent Colors (Status & Alerts) --- */
+  --color-success:     #00E676;
+  --color-warning:     #FFD600;
+  --color-danger:      #FF3B30;
+  --color-info:        #2979FF;
 
-  /* Fonts */
+  /* --- Graph Colors --- */
+  --color-altitude:    #2979FF;
+  --color-pressure:    #AF52DE;
+  --color-temperature: #FF9500;
+  --color-descent:     #FF3B30;
+  --color-battery:     #00E676;
+
+  /* --- Spacing (8px grid) --- */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  24px;
+  --space-6:  32px;
+  --space-8:  48px;
+
+  /* --- Typography --- */
   --font-heading: 'Inter', Arial, sans-serif;
-  --font-body: 'Inter', Arial, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+  --font-body:    'Inter', Arial, sans-serif;
+  --font-mono:    'JetBrains Mono', 'Courier New', monospace;
 
-  /* Spacing (8px grid) */
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-5: 24px;
-  --space-6: 32px;
-
-  /* Transitions */
-  --transition-fast: 0.2s ease;
+  /* --- Transitions --- */
+  --transition-fast:   0.2s ease;
   --transition-normal: 0.3s ease;
+
+  /* --- Layout --- */
+  --topbar-height: 64px;
+  --footer-height: 36px;
+  --panel-radius:  4px;
 }
 
-/* ===== Reset ===== */
-*, *::before, *::after {
+
+/* =================================================================
+   2. RESET & BASE STYLES
+   ================================================================= */
+
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* ===== Global Defaults ===== */
+html {
+  font-size: 14px;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
   font-family: var(--font-body);
   font-size: 14px;
@@ -55,11 +88,1410 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
 }
 
-/* ===== Temporary layout to render all sections ===== */
-/* Full design system will replace this in Step 3 */
+a {
+  color: var(--color-info);
+  text-decoration: none;
+}
 
+a:hover {
+  text-decoration: underline;
+}
+
+img, svg {
+  display: block;
+  max-width: 100%;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+/* Selection styling */
+::selection {
+  background: var(--color-info);
+  color: var(--color-text);
+}
+
+
+/* =================================================================
+   3. TYPOGRAPHY
+   ================================================================= */
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: -0.25px;
+  color: var(--color-text);
+}
+
+h1 {
+  font-size: 24px;
+  line-height: 32px;
+  letter-spacing: -0.5px;
+}
+
+h2 {
+  font-size: 18px;
+  line-height: 24px;
+}
+
+h3 {
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 500;
+}
+
+/* Data display values — always monospace */
 .data-value {
   font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--color-text);
+  letter-spacing: 0;
+}
+
+/* Data unit labels */
+.data-unit {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--color-text-muted);
+  letter-spacing: 0.25px;
+}
+
+/* Small labels */
+.label {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  letter-spacing: 0.25px;
+  text-transform: uppercase;
+}
+
+
+/* =================================================================
+   4. KEYFRAME ANIMATIONS
+   ================================================================= */
+
+/* Pulse — for error code fault state */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.05);
+  }
+}
+
+/* Fade In — panels loading */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Slide In — side panels */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Blink — connection status dot */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* Glow — critical alert border */
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 4px rgba(255, 59, 48, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 16px rgba(255, 59, 48, 0.6);
+  }
+}
+
+
+/* =================================================================
+   5. ACCESSIBILITY — FOCUS STATES
+   ================================================================= */
+
+:focus {
+  outline: 2px solid var(--color-info);
+  outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-info);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(41, 121, 255, 0.3);
+}
+
+
+/* =================================================================
+   6. LAYOUT — TOP CONTROL BAR
+   ================================================================= */
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--topbar-height);
+  padding: 0 var(--space-4);
+  background: var(--color-bg-panel);
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+  flex-shrink: 0;
+}
+
+.topbar__brand {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+.topbar__title {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--color-text);
+}
+
+.topbar__subtitle {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.topbar__controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.topbar__group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* Separator between button groups */
+.topbar__group + .topbar__group {
+  padding-left: var(--space-3);
+  border-left: 1px solid var(--color-border);
+}
+
+.topbar__status {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding-left: var(--space-3);
+  border-left: 1px solid var(--color-border);
+}
+
+/* Status indicator dot */
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-text-muted);
+  flex-shrink: 0;
+  transition: background var(--transition-normal);
+}
+
+.status-indicator--online {
+  background: var(--color-success);
+  animation: blink 2s ease infinite;
+}
+
+.status-indicator--offline {
+  background: var(--color-text-muted);
+}
+
+.status-indicator--connecting {
+  background: var(--color-warning);
+  animation: blink 1s ease infinite;
+}
+
+.status-indicator--error {
+  background: var(--color-danger);
+}
+
+.status-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+
+/* =================================================================
+   7. BUTTONS
+   ================================================================= */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: 10px 20px;
+  background: var(--color-text);
+  color: var(--color-bg);
+  border: 2px solid var(--color-text);
+  border-radius: var(--panel-radius);
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  user-select: none;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.btn:hover {
+  background: var(--color-bg);
+  color: var(--color-text);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+}
+
+.btn:active {
+  transform: scale(0.98) translateY(0);
+  box-shadow: none;
+}
+
+.btn:disabled,
+.btn[disabled] {
+  background: #1A1A1A;
+  color: #555555;
+  border-color: #333333;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+  opacity: 0.6;
+}
+
+.btn__icon {
+  flex-shrink: 0;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* --- Button Variants --- */
+
+.btn--success {
+  background: var(--color-success);
+  color: #000000;
+  border-color: var(--color-success);
+}
+
+.btn--success:hover {
+  background: var(--color-bg);
+  color: var(--color-success);
+  border-color: var(--color-success);
+}
+
+.btn--danger {
+  background: var(--color-danger);
+  color: #FFFFFF;
+  border-color: var(--color-danger);
+}
+
+.btn--danger:hover {
+  background: var(--color-bg);
+  color: var(--color-danger);
+  border-color: var(--color-danger);
+}
+
+.btn--warning {
+  background: var(--color-warning);
+  color: #000000;
+  border-color: var(--color-warning);
+}
+
+.btn--warning:hover {
+  background: var(--color-bg);
+  color: var(--color-warning);
+  border-color: var(--color-warning);
+}
+
+.btn--info {
+  background: var(--color-info);
+  color: #FFFFFF;
+  border-color: var(--color-info);
+}
+
+.btn--info:hover {
+  background: var(--color-bg);
+  color: var(--color-info);
+  border-color: var(--color-info);
+}
+
+/* Small button variant */
+.btn--sm {
+  padding: 6px 14px;
+  font-size: 12px;
+}
+
+/* Command button — full width in mission panel */
+.btn--command {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 14px;
+  justify-content: flex-start;
+  gap: var(--space-3);
+}
+
+
+/* =================================================================
+   8. PANELS (Shared component)
+   ================================================================= */
+
+.panel {
+  background: var(--color-bg-panel);
+  border: 1px solid var(--color-border);
+  border-radius: var(--panel-radius);
+  padding: var(--space-4);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  animation: fadeIn 0.4s ease both;
+  overflow: hidden;
+}
+
+.panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.panel__title {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.panel__badge {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--color-text-muted);
+  background: var(--color-bg);
+  padding: 2px 8px;
+  border-radius: 2px;
+  border: 1px solid var(--color-border);
+}
+
+.panel__badge--status {
+  color: var(--color-success);
+  border-color: var(--color-success);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+
+/* =================================================================
+   9. INPUT FIELDS & SELECT
+   ================================================================= */
+
+.input-select,
+.input-field {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--panel-radius);
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  padding: 6px 12px;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.input-select {
+  padding-right: 28px;
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23B0B0B0' stroke-width='2' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 12px;
+}
+
+.input-select:focus,
+.input-field:focus {
+  border-color: var(--color-info);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(41, 121, 255, 0.2);
+}
+
+.input-select option {
+  background: var(--color-bg-panel);
+  color: var(--color-text);
+}
+
+
+/* =================================================================
+   10. MAIN DASHBOARD LAYOUT
+   ================================================================= */
+
+.dashboard {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  max-width: 1920px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Row containers */
+.dashboard__row {
+  display: grid;
+  gap: var(--space-4);
+}
+
+/* Row 1: Telemetry (2fr) + Error Codes (1fr) */
+.dashboard__row--top {
+  grid-template-columns: 2fr 1fr;
+}
+
+/* Row 3: Map + Orientation + Mission Controls */
+.dashboard__row--bottom {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+
+/* =================================================================
+   11. TELEMETRY PANEL
+   ================================================================= */
+
+.telemetry-tables {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+.telemetry-table__title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: var(--space-2);
+}
+
+/* Data tables */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.data-table th {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: left;
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg);
+}
+
+.data-table td {
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--color-border-light);
+  font-size: 13px;
+  color: var(--color-text-muted);
+  transition: background var(--transition-fast);
+}
+
+.data-table td.data-value {
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  text-align: right;
+}
+
+.data-table td.data-unit {
+  color: var(--color-text-muted);
+  font-size: 11px;
+  text-align: right;
+  width: 40px;
+}
+
+/* Alternating row colors */
+.data-table tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.data-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+
+/* =================================================================
+   12. ERROR CODE PANEL
+   ================================================================= */
+
+.error-code-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  padding: var(--space-5) 0;
+}
+
+.error-digit-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.error-digit {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 48px;
+  font-weight: 700;
+  border-radius: var(--panel-radius);
+  background: var(--color-success);
+  color: #000000;
+  transition: all var(--transition-normal);
+  letter-spacing: 2px;
+}
+
+/* Fault state: red with pulse */
+.error-digit.fault {
+  background: var(--color-danger);
+  color: #FFFFFF;
+  animation: pulse 1s ease infinite;
+  box-shadow: 0 0 12px rgba(255, 59, 48, 0.4);
+}
+
+.error-digit__label {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+
+/* =================================================================
+   13. REAL-TIME GRAPHS PANEL
+   ================================================================= */
+
+.graphs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+}
+
+/* Last two graphs span to fill evenly */
+.graphs-grid .graph-card:nth-child(4) {
+  grid-column: 1 / 2;
+}
+.graphs-grid .graph-card:nth-child(5) {
+  grid-column: 2 / 3;
+}
+
+.graph-card {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--panel-radius);
+  padding: var(--space-3);
+}
+
+.graph-card__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: var(--space-2);
+}
+
+/* Color-coded dots for each graph */
+.graph-card__color-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.graph-card__color-dot--altitude    { background: var(--color-altitude); }
+.graph-card__color-dot--pressure    { background: var(--color-pressure); }
+.graph-card__color-dot--temperature { background: var(--color-temperature); }
+.graph-card__color-dot--descent-rate { background: var(--color-descent); }
+.graph-card__color-dot--battery     { background: var(--color-battery); }
+
+.graph-card__canvas-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  min-height: 160px;
+}
+
+.graph-card__canvas-wrapper canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+
+/* =================================================================
+   14. GPS MAP PANEL
+   ================================================================= */
+
+.map-panel__coords {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.map-container {
+  position: relative;
+  width: 100%;
+  height: 320px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--panel-radius);
+  overflow: hidden;
+}
+
+.map-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+
+.map-placeholder p {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.map-panel__footer {
+  display: flex;
+  gap: var(--space-5);
+  margin-top: var(--space-3);
+}
+
+.map-stat {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.map-stat__label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+
+/* =================================================================
+   15. ORIENTATION PANEL
+   ================================================================= */
+
+.orientation-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.orientation-horizon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border-light);
+  border-radius: 50%;
+  padding: var(--space-1);
+}
+
+.orientation-horizon canvas {
+  border-radius: 50%;
+}
+
+.orientation-readouts {
+  display: flex;
+  gap: var(--space-5);
+}
+
+.orientation-value {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.orientation-value__label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.orientation-value .data-value {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+
+/* =================================================================
+   16. MISSION CONTROL PANEL
+   ================================================================= */
+
+.mission-controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.mission-command {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* Command status indicator */
+.command-status {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-2);
+}
+
+.command-status__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-text-muted);
+  flex-shrink: 0;
+  transition: background var(--transition-normal);
+}
+
+.command-status__text {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.25px;
+}
+
+/* Status variants — applied via JS */
+.command-status--pending .command-status__dot   { background: var(--color-warning); }
+.command-status--sent .command-status__dot      { background: var(--color-info); }
+.command-status--confirmed .command-status__dot { background: var(--color-success); }
+.command-status--failed .command-status__dot    { background: var(--color-danger); }
+
+/* Command Log */
+.command-log {
+  margin-top: var(--space-4);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border-light);
+}
+
+.command-log__title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: var(--space-2);
+}
+
+.command-log__entries {
+  max-height: 120px;
+  overflow-y: auto;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-text-muted);
+  line-height: 1.8;
+}
+
+.command-log__empty {
+  font-family: var(--font-body);
+  font-style: italic;
+  color: var(--color-text-muted);
+  opacity: 0.5;
+  font-size: 12px;
+}
+
+/* Scrollbar styling for command log */
+.command-log__entries::-webkit-scrollbar {
+  width: 4px;
+}
+
+.command-log__entries::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+
+.command-log__entries::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 2px;
+}
+
+
+/* =================================================================
+   17. VIDEO STREAM PANEL
+   ================================================================= */
+
+.video-panel__controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.video-status {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-left: var(--space-2);
+}
+
+.video-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  max-height: 480px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--panel-radius);
+  overflow: hidden;
+}
+
+.video-feed {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #000000;
+  display: none;
+}
+
+.video-feed.active {
+  display: block;
+}
+
+.video-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  color: var(--color-text-muted);
+}
+
+.video-placeholder p {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.video-placeholder.hidden {
+  display: none;
+}
+
+
+/* =================================================================
+   18. STATUS BADGES & INDICATORS
+   ================================================================= */
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 2px 8px;
+  border-radius: 2px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.25px;
+  text-transform: uppercase;
+  transition: all var(--transition-normal);
+}
+
+.status-badge--success {
+  background: var(--color-success);
+  color: #000000;
+}
+
+.status-badge--warning {
+  background: var(--color-warning);
+  color: #000000;
+}
+
+.status-badge--danger {
+  background: var(--color-danger);
+  color: #FFFFFF;
+}
+
+.status-badge--info {
+  background: var(--color-info);
+  color: #FFFFFF;
+}
+
+
+/* =================================================================
+   19. FOOTER
+   ================================================================= */
+
+.app-footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--footer-height);
+  padding: 0 var(--space-4);
+  background: var(--color-bg-panel);
+  border-top: 1px solid var(--color-border);
+  font-size: 12px;
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+.app-footer__left,
+.app-footer__right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.app-footer__brand {
+  font-weight: 600;
+  color: var(--color-text);
+  letter-spacing: 0.5px;
+}
+
+.app-footer__separator {
+  color: var(--color-border);
+}
+
+.app-footer__mission {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--color-success);
+  letter-spacing: 0.5px;
+}
+
+.app-footer__item {
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+
+/* =================================================================
+   20. UTILITY CLASSES
+   ================================================================= */
+
+.text-mono   { font-family: var(--font-mono); }
+.text-muted  { color: var(--color-text-muted); }
+.text-success { color: var(--color-success); }
+.text-warning { color: var(--color-warning); }
+.text-danger  { color: var(--color-danger); }
+.text-info    { color: var(--color-info); }
+
+.bg-panel    { background: var(--color-bg-panel); }
+
+.flex        { display: flex; }
+.flex-center { display: flex; align-items: center; justify-content: center; }
+.flex-col    { display: flex; flex-direction: column; }
+.grid        { display: grid; }
+
+.gap-1 { gap: var(--space-1); }
+.gap-2 { gap: var(--space-2); }
+.gap-3 { gap: var(--space-3); }
+.gap-4 { gap: var(--space-4); }
+
+.hidden      { display: none !important; }
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+
+/* =================================================================
+   21. PANEL LOAD STAGGER (Sequential fade-in)
+   ================================================================= */
+
+.dashboard__row--top    .panel:nth-child(1) { animation-delay: 0.05s; }
+.dashboard__row--top    .panel:nth-child(2) { animation-delay: 0.10s; }
+.graphs-panel                                { animation-delay: 0.15s; }
+.dashboard__row--bottom .panel:nth-child(1) { animation-delay: 0.20s; }
+.dashboard__row--bottom .panel:nth-child(2) { animation-delay: 0.25s; }
+.dashboard__row--bottom .panel:nth-child(3) { animation-delay: 0.30s; }
+.video-panel                                 { animation-delay: 0.35s; }
+
+
+/* =================================================================
+   22. RESPONSIVE — LAPTOP (1366–1919px)
+   ================================================================= */
+
+@media (max-width: 1919px) {
+  .dashboard {
+    max-width: 100%;
+  }
+
+  .graphs-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .graph-card__canvas-wrapper {
+    min-height: 140px;
+  }
+
+  .map-container {
+    height: 280px;
+  }
+}
+
+
+/* =================================================================
+   23. RESPONSIVE — SMALL LAPTOP (1024–1365px)
+   ================================================================= */
+
+@media (max-width: 1365px) {
+  .topbar {
+    height: auto;
+    min-height: var(--topbar-height);
+    padding: var(--space-3) var(--space-4);
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .topbar__controls {
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  /* Telemetry row: stack to single column */
+  .dashboard__row--top {
+    grid-template-columns: 1fr;
+  }
+
+  /* Graphs: 2 columns */
+  .graphs-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .graphs-grid .graph-card:nth-child(5) {
+    grid-column: auto;
+  }
+
+  /* Bottom row: stack map/orientation/controls */
+  .dashboard__row--bottom {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Mission panel spans full width */
+  .mission-panel {
+    grid-column: 1 / -1;
+  }
+
+  .map-container {
+    height: 260px;
+  }
+
+  .orientation-horizon canvas {
+    width: 240px;
+    height: 240px;
+  }
+
+  .error-digit {
+    width: 68px;
+    height: 68px;
+    font-size: 40px;
+  }
+}
+
+
+/* =================================================================
+   24. RESPONSIVE — TABLET (768–1023px)
+   ================================================================= */
+
+@media (max-width: 1023px) {
+  .topbar__brand {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .topbar__controls {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .topbar__group + .topbar__group {
+    padding-left: 0;
+    border-left: none;
+  }
+
+  .topbar__status {
+    padding-left: 0;
+    border-left: none;
+  }
+
+  .dashboard__row--top,
+  .dashboard__row--bottom {
+    grid-template-columns: 1fr;
+  }
+
+  .telemetry-tables {
+    grid-template-columns: 1fr;
+  }
+
+  .graphs-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .mission-panel {
+    grid-column: auto;
+  }
+
+  /* Mission controls side by side */
+  .mission-controls {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .mission-command {
+    flex: 1 1 200px;
+  }
+
+  .btn--command {
+    width: 100%;
+  }
+
+  .map-container {
+    height: 240px;
+  }
+
+  .error-digit {
+    width: 60px;
+    height: 60px;
+    font-size: 36px;
+  }
+
+  .error-code-display {
+    gap: var(--space-3);
+  }
+}
+
+
+/* =================================================================
+   25. RESPONSIVE — MOBILE (<768px)
+   ================================================================= */
+
+@media (max-width: 767px) {
+  .topbar {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: var(--space-3);
+  }
+
+  .topbar__controls {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .topbar__group {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    font-size: 12px;
+    padding: 8px 14px;
+  }
+
+  .dashboard {
+    padding: var(--space-2);
+    gap: var(--space-2);
+  }
+
+  .graphs-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .graph-card__canvas-wrapper {
+    min-height: 120px;
+  }
+
+  .orientation-readouts {
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .orientation-horizon canvas {
+    width: 200px;
+    height: 200px;
+  }
+
+  .mission-controls {
+    flex-direction: column;
+  }
+
+  .mission-command {
+    flex: auto;
+  }
+
+  .error-digit {
+    width: 56px;
+    height: 56px;
+    font-size: 32px;
+  }
+
+  .error-code-display {
+    gap: var(--space-2);
+    padding: var(--space-3) 0;
+  }
+
+  .map-container {
+    height: 200px;
+  }
+
+  .video-panel__controls {
+    flex-wrap: wrap;
+  }
+
+  .app-footer {
+    flex-direction: column;
+    height: auto;
+    padding: var(--space-2) var(--space-4);
+    gap: var(--space-1);
+  }
+}
+
+
+/* =================================================================
+   26. SCROLLBAR GLOBAL STYLING
+   ================================================================= */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+
+/* =================================================================
+   27. PRINT STYLES
+   ================================================================= */
+
+@media print {
+  body {
+    background: #FFFFFF;
+    color: #000000;
+  }
+
+  .topbar,
+  .app-footer,
+  .video-panel,
+  .btn {
+    display: none;
+  }
+
+  .panel {
+    border: 1px solid #CCCCCC;
+    box-shadow: none;
+    break-inside: avoid;
+  }
+
+  .error-digit {
+    border: 2px solid #000000;
+  }
 }
