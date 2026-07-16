@@ -46,6 +46,8 @@ const OrvixApp = (function () {
     TopBar.initialize();
     ChartsManager.initializeCharts();
     ErrorCodeMonitor.initializeErrorMonitoring();
+    GpsMapManager.initializeMap();
+    OrientationManager.initializeOrientation();
 
     // Subscribe to state changes for reactive UI updates
     OrvixState.subscribe(_onStateChange);
@@ -73,12 +75,16 @@ const OrvixApp = (function () {
     // Telemetry reset check
     if (prev.packetCount > 0 && next.packetCount === 0) {
       ChartsManager.clearAllCharts();
+      GpsMapManager.clearMap();
+      OrientationManager.clearOrientation();
     }
 
     // Telemetry packet updates
     if (prev.currentPacket !== next.currentPacket && next.currentPacket) {
       _updateTelemetryDisplay(next.currentPacket);
       ChartsManager.updateCharts(next.currentPacket);
+      GpsMapManager.updateMap(next.currentPacket);
+      OrientationManager.updateOrientation(next.currentPacket);
       
       // Calculate and update error codes in state
       const nextCodes = ErrorCodeMonitor.calculateErrorCodes(next.currentPacket);
