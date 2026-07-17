@@ -617,8 +617,8 @@ h3 {
 
 .dashboard {
   flex: 1;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr 1.5fr 1fr;
   gap: var(--space-4);
   padding: var(--space-4);
   max-width: 1920px;
@@ -626,22 +626,21 @@ h3 {
   margin: 0 auto;
 }
 
-/* Row containers */
-.dashboard__row {
-  display: grid;
+.dashboard__column {
+  display: flex;
+  flex-direction: column;
   gap: var(--space-4);
 }
 
-/* Row 1: Telemetry (2fr) + Error Codes (1fr) */
-.dashboard__row--top {
-  grid-template-columns: 2fr 1fr;
+.col3-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
 }
 
-/* Row 3: Map + Orientation + Mission Controls */
-.dashboard__row--bottom {
-  grid-template-columns: 1fr 1fr 1fr;
+.col3-row > .panel {
+  min-width: 0;
 }
-
 
 /* =================================================================
    11. TELEMETRY PANEL
@@ -649,7 +648,7 @@ h3 {
 
 .telemetry-tables {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: var(--space-4);
 }
 
@@ -773,16 +772,13 @@ h3 {
 
 .graphs-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1fr 1fr;
   gap: var(--space-4);
 }
 
-/* Last two graphs span to fill evenly */
-.graphs-grid .graph-card:nth-child(4) {
-  grid-column: 1 / 2;
-}
+/* Last graph spans full width */
 .graphs-grid .graph-card:nth-child(5) {
-  grid-column: 2 / 3;
+  grid-column: 1 / -1;
 }
 
 .graph-card {
@@ -911,10 +907,13 @@ h3 {
   border: 1px solid var(--color-border-light);
   border-radius: 50%;
   padding: var(--space-1);
+  max-width: 100%;
 }
 
 .orientation-horizon canvas {
   border-radius: 50%;
+  max-width: 100%;
+  height: auto;
 }
 
 .orientation-readouts {
@@ -938,7 +937,7 @@ h3 {
 }
 
 .orientation-value .data-value {
-  font-size: 20px;
+  font-size: 14px;
   font-weight: 700;
 }
 
@@ -1233,13 +1232,13 @@ h3 {
    21. PANEL LOAD STAGGER (Sequential fade-in)
    ================================================================= */
 
-.dashboard__row--top    .panel:nth-child(1) { animation-delay: 0.05s; }
-.dashboard__row--top    .panel:nth-child(2) { animation-delay: 0.10s; }
-.graphs-panel                                { animation-delay: 0.15s; }
-.dashboard__row--bottom .panel:nth-child(1) { animation-delay: 0.20s; }
-.dashboard__row--bottom .panel:nth-child(2) { animation-delay: 0.25s; }
-.dashboard__row--bottom .panel:nth-child(3) { animation-delay: 0.30s; }
-.video-panel                                 { animation-delay: 0.35s; }
+.dashboard__column:nth-child(1) .panel:nth-child(1) { animation-delay: 0.05s; }
+.dashboard__column:nth-child(1) .panel:nth-child(2) { animation-delay: 0.10s; }
+.dashboard__column:nth-child(2) .panel:nth-child(1) { animation-delay: 0.15s; }
+.dashboard__column:nth-child(3) .panel:nth-child(1) { animation-delay: 0.20s; }
+.dashboard__column:nth-child(3) .panel:nth-child(2) { animation-delay: 0.25s; }
+.dashboard__column:nth-child(3) .panel:nth-child(3) { animation-delay: 0.30s; }
+.dashboard__column:nth-child(3) .panel:nth-child(4) { animation-delay: 0.35s; }
 
 
 /* =================================================================
@@ -1249,10 +1248,6 @@ h3 {
 @media (max-width: 1919px) {
   .dashboard {
     max-width: 100%;
-  }
-
-  .graphs-grid {
-    grid-template-columns: repeat(3, 1fr);
   }
 
   .graph-card__canvas-wrapper {
@@ -1283,27 +1278,21 @@ h3 {
     gap: var(--space-2);
   }
 
-  /* Telemetry row: stack to single column */
-  .dashboard__row--top {
-    grid-template-columns: 1fr;
-  }
-
-  /* Graphs: 2 columns */
-  .graphs-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .graphs-grid .graph-card:nth-child(5) {
-    grid-column: auto;
-  }
-
-  /* Bottom row: stack map/orientation/controls */
-  .dashboard__row--bottom {
+  /* Dashboard: collapse to 2 columns */
+  .dashboard {
     grid-template-columns: 1fr 1fr;
   }
 
-  /* Mission panel spans full width */
-  .mission-panel {
+  /* Column 3 wraps to second row, full width */
+  .dashboard__column:nth-child(3) {
+    grid-column: 1 / -1;
+  }
+
+  .graphs-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .graphs-grid .graph-card:nth-child(5) {
     grid-column: 1 / -1;
   }
 
@@ -1349,35 +1338,23 @@ h3 {
     border-left: none;
   }
 
-  .dashboard__row--top,
-  .dashboard__row--bottom {
+  .dashboard {
     grid-template-columns: 1fr;
   }
 
-  .telemetry-tables {
-    grid-template-columns: 1fr;
+  .dashboard__column:nth-child(3) {
+    grid-column: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
   }
 
   .graphs-grid {
     grid-template-columns: 1fr 1fr;
   }
 
-  .mission-panel {
-    grid-column: auto;
-  }
-
-  /* Mission controls side by side */
-  .mission-controls {
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-
-  .mission-command {
-    flex: 1 1 200px;
-  }
-
-  .btn--command {
-    width: 100%;
+  .graphs-grid .graph-card:nth-child(5) {
+    grid-column: 1 / -1;
   }
 
   .map-container {
@@ -1426,6 +1403,14 @@ h3 {
   .dashboard {
     padding: var(--space-2);
     gap: var(--space-2);
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard__column:nth-child(3) {
+    grid-column: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
   }
 
   .graphs-grid {
@@ -1446,14 +1431,6 @@ h3 {
     height: 200px;
   }
 
-  .mission-controls {
-    flex-direction: column;
-  }
-
-  .mission-command {
-    flex: auto;
-  }
-
   .error-digit {
     width: 56px;
     height: 56px;
@@ -1467,6 +1444,10 @@ h3 {
 
   .map-container {
     height: 200px;
+  }
+
+  .col3-row {
+    grid-template-columns: 1fr;
   }
 
   .video-panel__controls {

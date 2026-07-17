@@ -168,11 +168,11 @@
     </nav>
   </header>
 
-  <!-- ===== MAIN DASHBOARD ===== -->
+  <!-- ===== MAIN DASHBOARD (3-COLUMN LAYOUT) ===== -->
   <main class="dashboard" role="main">
 
-    <!-- ===== ROW 1: TELEMETRY + ERROR CODES ===== -->
-    <div class="dashboard__row dashboard__row--top">
+    <!-- ===== COLUMN 1: Telemetry (Container) + Telemetry (Payload) + Error Code ===== -->
+    <div class="dashboard__column">
 
       <!-- TELEMETRY DISPLAY -->
       <section class="panel telemetry-panel" id="telemetry-section" aria-label="Telemetry data display">
@@ -329,72 +329,74 @@
       </section>
     </div>
 
-    <!-- ===== ROW 2: REAL-TIME GRAPHS ===== -->
-    <section class="panel graphs-panel" id="graphs-section" aria-label="Real-time telemetry graphs">
-      <div class="panel__header">
-        <h2 class="panel__title">Real-Time Graphs</h2>
-      </div>
+    <!-- ===== COLUMN 2: Real-Time Graphs ===== -->
+    <div class="dashboard__column">
+      <section class="panel graphs-panel" id="graphs-section" aria-label="Real-time telemetry graphs">
+        <div class="panel__header">
+          <h2 class="panel__title">Real-Time Graphs</h2>
+        </div>
 
-      <div class="graphs-grid">
-        <!-- Altitude vs Time -->
-        <article class="graph-card" aria-label="Altitude graph">
-          <h3 class="graph-card__title">
-            <span class="graph-card__color-dot graph-card__color-dot--altitude" aria-hidden="true"></span>
-            Altitude
-          </h3>
-          <div class="graph-card__canvas-wrapper">
-            <canvas id="chart-altitude" aria-label="Altitude vs Time chart" role="img"></canvas>
-          </div>
-        </article>
+        <div class="graphs-grid">
+          <!-- Altitude vs Time -->
+          <article class="graph-card" aria-label="Altitude graph">
+            <h3 class="graph-card__title">
+              <span class="graph-card__color-dot graph-card__color-dot--altitude" aria-hidden="true"></span>
+              Altitude
+            </h3>
+            <div class="graph-card__canvas-wrapper">
+              <canvas id="chart-altitude" aria-label="Altitude vs Time chart" role="img"></canvas>
+            </div>
+          </article>
 
-        <!-- Pressure vs Time -->
-        <article class="graph-card" aria-label="Pressure graph">
-          <h3 class="graph-card__title">
-            <span class="graph-card__color-dot graph-card__color-dot--pressure" aria-hidden="true"></span>
-            Pressure
-          </h3>
-          <div class="graph-card__canvas-wrapper">
-            <canvas id="chart-pressure" aria-label="Pressure vs Time chart" role="img"></canvas>
-          </div>
-        </article>
+          <!-- Pressure vs Time -->
+          <article class="graph-card" aria-label="Pressure graph">
+            <h3 class="graph-card__title">
+              <span class="graph-card__color-dot graph-card__color-dot--pressure" aria-hidden="true"></span>
+              Pressure
+            </h3>
+            <div class="graph-card__canvas-wrapper">
+              <canvas id="chart-pressure" aria-label="Pressure vs Time chart" role="img"></canvas>
+            </div>
+          </article>
 
-        <!-- Temperature vs Time -->
-        <article class="graph-card" aria-label="Temperature graph">
-          <h3 class="graph-card__title">
-            <span class="graph-card__color-dot graph-card__color-dot--temperature" aria-hidden="true"></span>
-            Temperature
-          </h3>
-          <div class="graph-card__canvas-wrapper">
-            <canvas id="chart-temperature" aria-label="Temperature vs Time chart" role="img"></canvas>
-          </div>
-        </article>
+          <!-- Temperature vs Time -->
+          <article class="graph-card" aria-label="Temperature graph">
+            <h3 class="graph-card__title">
+              <span class="graph-card__color-dot graph-card__color-dot--temperature" aria-hidden="true"></span>
+              Temperature
+            </h3>
+            <div class="graph-card__canvas-wrapper">
+              <canvas id="chart-temperature" aria-label="Temperature vs Time chart" role="img"></canvas>
+            </div>
+          </article>
 
-        <!-- Descent Rate vs Time -->
-        <article class="graph-card" aria-label="Descent rate graph">
-          <h3 class="graph-card__title">
-            <span class="graph-card__color-dot graph-card__color-dot--descent-rate" aria-hidden="true"></span>
-            Descent Rate
-          </h3>
-          <div class="graph-card__canvas-wrapper">
-            <canvas id="chart-descent-rate" aria-label="Descent Rate vs Time chart" role="img"></canvas>
-          </div>
-        </article>
+          <!-- Descent Rate vs Time -->
+          <article class="graph-card" aria-label="Descent rate graph">
+            <h3 class="graph-card__title">
+              <span class="graph-card__color-dot graph-card__color-dot--descent-rate" aria-hidden="true"></span>
+              Descent Rate
+            </h3>
+            <div class="graph-card__canvas-wrapper">
+              <canvas id="chart-descent-rate" aria-label="Descent Rate vs Time chart" role="img"></canvas>
+            </div>
+          </article>
 
-        <!-- Battery Voltage vs Time -->
-        <article class="graph-card" aria-label="Battery voltage graph">
-          <h3 class="graph-card__title">
-            <span class="graph-card__color-dot graph-card__color-dot--battery" aria-hidden="true"></span>
-            Battery Voltage
-          </h3>
-          <div class="graph-card__canvas-wrapper">
-            <canvas id="chart-battery" aria-label="Battery Voltage vs Time chart" role="img"></canvas>
-          </div>
-        </article>
-      </div>
-    </section>
+          <!-- Battery Voltage vs Time -->
+          <article class="graph-card" aria-label="Battery voltage graph">
+            <h3 class="graph-card__title">
+              <span class="graph-card__color-dot graph-card__color-dot--battery" aria-hidden="true"></span>
+              Battery Voltage
+            </h3>
+            <div class="graph-card__canvas-wrapper">
+              <canvas id="chart-battery" aria-label="Battery Voltage vs Time chart" role="img"></canvas>
+            </div>
+          </article>
+        </div>
+      </section>
+    </div>
 
-    <!-- ===== ROW 3: MAP + ORIENTATION + VIDEO ===== -->
-    <div class="dashboard__row dashboard__row--bottom">
+    <!-- ===== COLUMN 3: GPS Tracking + Orientation + Mission Control + Video Stream ===== -->
+    <div class="dashboard__column">
 
       <!-- GPS TRACKING MAP -->
       <section class="panel map-panel" id="map-section" aria-label="GPS tracking map">
@@ -430,182 +432,184 @@
         </div>
       </section>
 
-      <!-- ORIENTATION VISUALIZATION -->
-      <section class="panel orientation-panel" id="orientation-section" aria-label="Orientation visualization">
+      <div class="col3-row">
+        <!-- ORIENTATION VISUALIZATION -->
+        <section class="panel orientation-panel" id="orientation-section" aria-label="Orientation visualization">
+          <div class="panel__header">
+            <h2 class="panel__title">Orientation</h2>
+          </div>
+
+          <div class="orientation-display">
+            <!-- Artificial Horizon Canvas -->
+            <div class="orientation-horizon" id="orientation-horizon-container">
+              <canvas id="orientation-canvas" width="220" height="220" aria-label="Artificial horizon display" role="img"></canvas>
+            </div>
+
+            <!-- Numeric Readouts -->
+            <div class="orientation-readouts">
+              <div class="orientation-value">
+                <span class="orientation-value__label">Roll</span>
+                <span class="data-value" id="orientation-roll">0.0</span>
+                <span class="data-unit">°</span>
+              </div>
+              <div class="orientation-value">
+                <span class="orientation-value__label">Pitch</span>
+                <span class="data-value" id="orientation-pitch">0.0</span>
+                <span class="data-unit">°</span>
+              </div>
+              <div class="orientation-value">
+                <span class="orientation-value__label">Yaw</span>
+                <span class="data-value" id="orientation-yaw">0.0</span>
+                <span class="data-unit">°</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- MISSION CONTROL PANEL -->
+        <section class="panel mission-panel" id="mission-section" aria-label="Mission control commands">
+          <div class="panel__header">
+            <h2 class="panel__title">Mission Control</h2>
+          </div>
+
+          <div class="mission-controls">
+            <!-- Manual Separation -->
+            <div class="mission-command">
+              <button
+                type="button"
+                id="btn-manual-separation"
+                class="btn btn--warning btn--command"
+                aria-label="Execute manual payload separation command"
+                title="Send manual separation command to CanSat (requires confirmation)"
+              >
+                <svg class="btn__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="12" y1="2" x2="12" y2="6"></line>
+                  <line x1="12" y1="18" x2="12" y2="22"></line>
+                  <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
+                  <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
+                  <line x1="2" y1="12" x2="6" y2="12"></line>
+                  <line x1="18" y1="12" x2="22" y2="12"></line>
+                </svg>
+                Manual Separation
+              </button>
+              <div class="command-status" id="separation-status">
+                <span class="command-status__dot" aria-hidden="true"></span>
+                <span class="command-status__text">Standby</span>
+              </div>
+            </div>
+
+            <!-- Emergency Parachute -->
+            <div class="mission-command">
+              <button
+                type="button"
+                id="btn-emergency-parachute"
+                class="btn btn--danger btn--command"
+                aria-label="Deploy emergency parachute"
+                title="EMERGENCY: Deploy parachute immediately (requires double confirmation)"
+              >
+                <svg class="btn__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 22V8"></path>
+                  <path d="M5 12H2a10 10 0 0 1 20 0h-3"></path>
+                  <path d="M5 12a7 7 0 0 1 14 0"></path>
+                  <path d="M9 12a3 3 0 0 1 6 0"></path>
+                </svg>
+                Emergency Parachute
+              </button>
+              <div class="command-status" id="parachute-status">
+                <span class="command-status__dot" aria-hidden="true"></span>
+                <span class="command-status__text">Standby</span>
+              </div>
+            </div>
+
+            <!-- Redundant Activation -->
+            <div class="mission-command">
+              <button
+                type="button"
+                id="btn-redundant-activation"
+                class="btn btn--info btn--command"
+                aria-label="Activate redundant backup systems"
+                title="Activate backup system redundancy protocols"
+              >
+                <svg class="btn__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+                Redundant Activation
+              </button>
+              <div class="command-status" id="redundant-status">
+                <span class="command-status__dot" aria-hidden="true"></span>
+                <span class="command-status__text">Standby</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Command Log -->
+          <div class="command-log">
+            <h3 class="command-log__title">Command Log</h3>
+            <div class="command-log__entries" id="command-log-entries" role="log" aria-live="polite">
+              <p class="command-log__empty">No commands issued</p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- VIDEO STREAM -->
+      <section class="panel video-panel" id="video-section" aria-label="Live video stream">
         <div class="panel__header">
-          <h2 class="panel__title">Orientation</h2>
-        </div>
+          <h2 class="panel__title">Video Stream</h2>
+          <div class="video-panel__controls">
+            <select id="camera-select" class="input-select" aria-label="Select camera device">
+              <option value="">Select Camera</option>
+            </select>
 
-        <div class="orientation-display">
-          <!-- Artificial Horizon Canvas -->
-          <div class="orientation-horizon" id="orientation-horizon-container">
-            <canvas id="orientation-canvas" width="280" height="280" aria-label="Artificial horizon display" role="img"></canvas>
-          </div>
-
-          <!-- Numeric Readouts -->
-          <div class="orientation-readouts">
-            <div class="orientation-value">
-              <span class="orientation-value__label">Roll</span>
-              <span class="data-value" id="orientation-roll">0.0</span>
-              <span class="data-unit">°</span>
-            </div>
-            <div class="orientation-value">
-              <span class="orientation-value__label">Pitch</span>
-              <span class="data-value" id="orientation-pitch">0.0</span>
-              <span class="data-unit">°</span>
-            </div>
-            <div class="orientation-value">
-              <span class="orientation-value__label">Yaw</span>
-              <span class="data-value" id="orientation-yaw">0.0</span>
-              <span class="data-unit">°</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- MISSION CONTROL PANEL -->
-      <section class="panel mission-panel" id="mission-section" aria-label="Mission control commands">
-        <div class="panel__header">
-          <h2 class="panel__title">Mission Control</h2>
-        </div>
-
-        <div class="mission-controls">
-          <!-- Manual Separation -->
-          <div class="mission-command">
             <button
               type="button"
-              id="btn-manual-separation"
-              class="btn btn--warning btn--command"
-              aria-label="Execute manual payload separation command"
-              title="Send manual separation command to CanSat (requires confirmation)"
+              id="btn-start-stream"
+              class="btn btn--sm"
+              aria-label="Start camera stream"
+              title="Start live video streaming from selected camera"
             >
-              <svg class="btn__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <line x1="12" y1="2" x2="12" y2="6"></line>
-                <line x1="12" y1="18" x2="12" y2="22"></line>
-                <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
-                <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
-                <line x1="2" y1="12" x2="6" y2="12"></line>
-                <line x1="18" y1="12" x2="22" y2="12"></line>
-              </svg>
-              Manual Separation
+              Start Stream
             </button>
-            <div class="command-status" id="separation-status">
-              <span class="command-status__dot" aria-hidden="true"></span>
-              <span class="command-status__text">Standby</span>
-            </div>
-          </div>
 
-          <!-- Emergency Parachute -->
-          <div class="mission-command">
             <button
               type="button"
-              id="btn-emergency-parachute"
-              class="btn btn--danger btn--command"
-              aria-label="Deploy emergency parachute"
-              title="EMERGENCY: Deploy parachute immediately (requires double confirmation)"
+              id="btn-stop-stream"
+              class="btn btn--sm btn--danger"
+              disabled
+              aria-label="Stop camera stream"
+              title="Stop live video streaming"
             >
-              <svg class="btn__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M12 22V8"></path>
-                <path d="M5 12H2a10 10 0 0 1 20 0h-3"></path>
-                <path d="M5 12a7 7 0 0 1 14 0"></path>
-                <path d="M9 12a3 3 0 0 1 6 0"></path>
-              </svg>
-              Emergency Parachute
+              Stop Stream
             </button>
-            <div class="command-status" id="parachute-status">
-              <span class="command-status__dot" aria-hidden="true"></span>
-              <span class="command-status__text">Standby</span>
-            </div>
-          </div>
 
-          <!-- Redundant Activation -->
-          <div class="mission-command">
-            <button
-              type="button"
-              id="btn-redundant-activation"
-              class="btn btn--info btn--command"
-              aria-label="Activate redundant backup systems"
-              title="Activate backup system redundancy protocols"
-            >
-              <svg class="btn__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-              </svg>
-              Redundant Activation
-            </button>
-            <div class="command-status" id="redundant-status">
-              <span class="command-status__dot" aria-hidden="true"></span>
-              <span class="command-status__text">Standby</span>
-            </div>
+            <span class="video-status" id="video-status-indicator">
+              <span class="status-indicator status-indicator--offline" id="video-status-dot" aria-hidden="true"></span>
+              <span id="video-status-text">Offline</span>
+            </span>
           </div>
         </div>
 
-        <!-- Command Log -->
-        <div class="command-log">
-          <h3 class="command-log__title">Command Log</h3>
-          <div class="command-log__entries" id="command-log-entries" role="log" aria-live="polite">
-            <p class="command-log__empty">No commands issued</p>
+        <div class="video-container">
+          <video
+            id="video-stream"
+            class="video-feed"
+            autoplay
+            playsinline
+            muted
+            aria-label="Live camera feed from CanSat ground station"
+          ></video>
+
+          <!-- Placeholder when no stream -->
+          <div class="video-placeholder" id="video-placeholder">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#B0B0B0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polygon points="23 7 16 12 23 17 23 7"></polygon>
+              <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+            </svg>
+            <p>Camera offline — Select a device and start streaming</p>
           </div>
         </div>
       </section>
     </div>
-
-    <!-- ===== ROW 4: VIDEO STREAM ===== -->
-    <section class="panel video-panel" id="video-section" aria-label="Live video stream">
-      <div class="panel__header">
-        <h2 class="panel__title">Video Stream</h2>
-        <div class="video-panel__controls">
-          <select id="camera-select" class="input-select" aria-label="Select camera device">
-            <option value="">Select Camera</option>
-          </select>
-
-          <button
-            type="button"
-            id="btn-start-stream"
-            class="btn btn--sm"
-            aria-label="Start camera stream"
-            title="Start live video streaming from selected camera"
-          >
-            Start Stream
-          </button>
-
-          <button
-            type="button"
-            id="btn-stop-stream"
-            class="btn btn--sm btn--danger"
-            disabled
-            aria-label="Stop camera stream"
-            title="Stop live video streaming"
-          >
-            Stop Stream
-          </button>
-
-          <span class="video-status" id="video-status-indicator">
-            <span class="status-indicator status-indicator--offline" id="video-status-dot" aria-hidden="true"></span>
-            <span id="video-status-text">Offline</span>
-          </span>
-        </div>
-      </div>
-
-      <div class="video-container">
-        <video
-          id="video-stream"
-          class="video-feed"
-          autoplay
-          playsinline
-          muted
-          aria-label="Live camera feed from CanSat ground station"
-        ></video>
-
-        <!-- Placeholder when no stream -->
-        <div class="video-placeholder" id="video-placeholder">
-          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#B0B0B0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <polygon points="23 7 16 12 23 17 23 7"></polygon>
-            <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
-          </svg>
-          <p>Camera offline — Select a device and start streaming</p>
-        </div>
-      </div>
-    </section>
 
   </main>
 
